@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class BufferUpdateThread implements Runnable {
     private static Thread thread = new Thread(new BufferUpdateThread());
 
-    private static volatile boolean stopFlag = false;
+    private static volatile boolean stopFlag = Boolean.FALSE;
 
     static {
         thread.setName("COMMON-UID-BufferUpdateThread");

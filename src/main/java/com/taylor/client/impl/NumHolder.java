@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class NumHolder {
-    private static Map<String, UidHolderStatus> currentIds = new ConcurrentHashMap();
+    private static Map<String, UidHolderStatus> currentIds = new ConcurrentHashMap<>();
 
     public static Map<String, UidHolderStatus> getCurrentIds() {
         return currentIds;
@@ -97,11 +97,21 @@ public class NumHolder {
             } else if (uidHolderStatus.getWaitingSlot().isFilled()) {
                 uidHolderStatus.swapSlot();  //切换slot
                 uidHolderStatus.getUsingSlot().setState(UidStateEnum.TAKING.getKey());
-                return uidHolderStatus.getUsingSlot().getCurrentNum().incrementAndGet();//正常取号
+                long result = uidHolderStatus.getUsingSlot().getCurrentNum().incrementAndGet();
+                if(result>uidHolderStatus.getUsingSlot().getMax()){
+                    throw new UidException("Cannot get uid.UsingSlot is aboveMax.");
+                }else{
+                    return result;
+                }
             } else if (uidHolderStatus.getWaitingSlot().isFilling()) {
                 ThreadUtil.sleep(100);
                 uidHolderStatus.swapSlot();  //切换slot
-                return uidHolderStatus.getUsingSlot().getCurrentNum().incrementAndGet();
+                long result = uidHolderStatus.getUsingSlot().getCurrentNum().incrementAndGet();
+                if(result>uidHolderStatus.getUsingSlot().getMax()){
+                    throw new UidException("Cannot get uid.UsingSlot is aboveMax.");
+                }else{
+                    return result;
+                }
             } else {
                 throw new UidException("Cannot get uid.UsingSlot is empty.");
             }

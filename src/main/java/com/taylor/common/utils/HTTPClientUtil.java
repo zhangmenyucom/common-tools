@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.taylor.common.utils;
 
 import com.alibaba.fastjson.JSON;
@@ -90,7 +87,7 @@ public class HTTPClientUtil {
 		try {
 			StringEntity entity = new StringEntity(String.valueOf(dataBody), "UTF-8");
 			if(log.isDebugEnabled()){
-				log.debug("[sendHTTPRequest]:"+String.valueOf(dataBody));
+				log.debug("[sendHTTPRequest]:{}",String.valueOf(dataBody));
 			}
 			HttpResponse response = null;
 
@@ -131,7 +128,7 @@ public class HTTPClientUtil {
 			}
 
 			HttpEntity responseEntity = response.getEntity();
-			if (null != responseEntity) {
+			if (responseEntity != null) {
 				String responseContent = EntityUtils.toString(responseEntity, "UTF-8");
 				EntityUtils.consume(entity);
 
@@ -211,7 +208,7 @@ public class HTTPClientUtil {
 			}
 
 			HttpEntity responseEntity = response.getEntity();
-			if (null != responseEntity) {
+			if (responseEntity != null) {
 				String responseContent = EntityUtils.toString(responseEntity, "UTF-8");
 				EntityUtils.consume(entity);
 
@@ -221,7 +218,7 @@ public class HTTPClientUtil {
 				JsonParser jp = factory.createJsonParser(responseContent);
 
 				resObjectNode = mapper.readTree(jp);
-				if (null == resObjectNode) {
+				if (resObjectNode == null) {
 					resObjectNode = HTTPClientUtil.factory.objectNode();
 				}
 				resObjectNode.put("statusCode", response.getStatusLine().getStatusCode());
